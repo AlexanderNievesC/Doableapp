@@ -1,3 +1,10 @@
+section{
+    display: flex;
+    flex-direction: column;
+    padding: 17px;
+    gap:20px;
+    width: 360px;
+}
 
 #section__login{
     display: flex;
@@ -12,13 +19,14 @@
 }
 
 
-#form__login{
+form{
     display: flex;
     flex-direction: column;
     gap:10px;
 }
 
-#input__primary{
+
+.input__primary{
     width: 328px;
     height: 42px;
     border-radius: 6px;
@@ -27,7 +35,7 @@
     align-content: center;
 }
 
-#button__primary{
+.button__primary{
     border-radius: 6px;
     padding: 9px 17px;
     background-color: var(--primary-700);
@@ -35,4 +43,31 @@
     font-size: 16px;
     color: white;
     font-weight: 500;
+    width: 100%;
+}
+
+.select__primary{
+    border-radius: 6px;
+    padding: 9px 13px;
+    border: 1px solid var(--secondary-800);
+    width: 100%;
+}
+
+
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    gap:23px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+input[type="checkbox"]:checked {
+    accent-color: var(--primary-700);
+}
+
+#section__body{
+    width: 328px;
+    height: 330px;
+
 }

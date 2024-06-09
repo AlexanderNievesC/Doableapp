@@ -1,4 +1,5 @@
 import MainPage from "../components/main.js"
+import { tokenKey } from "../config.js"
 import DOMHandler from "../dom-handler.js"
 import { loginUser } from "../services/session-services.js"
 import SignupPage from "./signup.js"
@@ -10,25 +11,25 @@ return `
     <img src="/assets/{ doable }.svg" width="101px" height="24px">    
 </header>
  <section id="section__login">
-    <form id="form__login">
-        <label id="primary" for="email">Email</label>
-        <input id="input__primary" name="email" type="text" placeholder="you@example.com">
+    <form>
+        <label class="primary" for="email">Email</label>
+        <input class="input__primary" name="email" type="text" placeholder="you@example.com">
 
-        <label id="primary" for="password">Password</label>
-        <input id="input__primary" name="password" type="text" placeholder="*****">
+        <label class="primary" for="password">Password</label>
+        <input class="input__primary" name="password" type="text" placeholder="*****">
 
-        <button id="button__primary">Login</button>
+        <button class="button__primary">Login</button>
     </form>
-    <div id="primary__pink" class="account">Create account</div>
+    <div class ="primary__pink" id="account_button">Create account</div>
  </section>
  `
 }
 
  function ListenEvents(){
     // Getting values from the form
-    const form = document.getElementById("form__login") 
+    const form = document.querySelector("form") 
 
-    form.addEventListener("submit",(event)=>{
+    form.addEventListener("submit",async(event)=>{
         try{event.preventDefault()
             const {email, password} = event.target.elements
             const credentials = {
@@ -36,14 +37,14 @@ return `
                 password: password.value
             }
             loginUser(credentials)
-            DOMHandler.load(MainPage)
+
         }catch(error){
             console.log(error)
         }
     })
 
     //Redirecting to page Create Account
-    const create_button= document.querySelector(".account")
+    const create_button= document.getElementById("account_button")
 
     create_button.addEventListener("click",()=>{
         DOMHandler.load(SignupPage)

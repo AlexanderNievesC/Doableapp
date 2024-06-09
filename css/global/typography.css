@@ -17,14 +17,14 @@ body {
   color: var(--gray-400);
 }
 
-#primary{
+.primary{
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
   font-family: var(--font-primary);
 }
 
-#primary__pink{
+.primary__pink{
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;

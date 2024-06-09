@@ -6,3 +6,16 @@ header{
     height: 48px;
     background-color: var(--secondary-700);
 }
+
+#header_main{
+    display: flex;
+    flex-direction: row;
+    gap:10px;
+}
+
+#logo_area{
+    display: flex;
+    flex-direction: row;
+    width: 300px;
+    justify-content: center;
+}

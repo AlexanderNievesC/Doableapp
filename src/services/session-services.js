@@ -7,3 +7,10 @@ export async function loginUser(credentials = { email, password }) {
   
     return user;
 }
+
+export async function signupUser(credentials = { email, password }) {
+    const { token, ...user } = await apiFetch("signup", { body: credentials });
+    sessionStorage.setItem(tokenKey, token);
+  
+    return user;
+}
