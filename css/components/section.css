@@ -1,0 +1,38 @@
+
+#section__login{
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+    height: 592px;
+    width: 360px;
+
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#form__login{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
+}
+
+#input__primary{
+    width: 328px;
+    height: 42px;
+    border-radius: 6px;
+    border: 1px solid var(--secondary-800);
+    padding:9px 13px;
+    align-content: center;
+}
+
+#button__primary{
+    border-radius: 6px;
+    padding: 9px 17px;
+    background-color: var(--primary-700);
+    border: none;
+    font-size: 16px;
+    color: white;
+    font-weight: 500;
+}
