@@ -71,3 +71,10 @@ input[type="checkbox"]:checked {
     height: 330px;
 
 }
+
+#flex-column{
+    display: flex;
+    flex-direction: row;
+    width: 328px;
+    justify-content: space-between;
+}

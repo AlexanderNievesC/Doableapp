@@ -31,3 +31,10 @@ body {
   font-family: var(--font-primary);
   color: var(--primary-700);
 }
+
+.primary__bold{
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  font-family: var(--secondary-900 );
+}

@@ -1,8 +1,12 @@
 import apiFetch from "../api-fetch.js"
 
-async function getTask(){
+ async function getTask(){
     const tasks = await apiFetch("tasks")
     return tasks
 }
 
-export {getTask}
+ async function createTask(task = {title,due_date}){
+    return await apiFetch("tasks",{body:task})
+}
+
+export {getTask, createTask}

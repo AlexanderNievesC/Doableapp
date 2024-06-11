@@ -5,9 +5,10 @@ const DOMHandler = (function (parentSelector) {
   
     return {
       module: null,
-      load(module) {
+      async load(module) {
         this.module = module;
-        parent.innerHTML = module;
+        const html = await module.toString();
+        parent.innerHTML = html;
         module.addListeners();
       },
       reload() {
