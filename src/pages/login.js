@@ -37,7 +37,6 @@ return `
                 password: password.value
             }
             loginUser(credentials)
-
         }catch(error){
             console.log(error)
         }

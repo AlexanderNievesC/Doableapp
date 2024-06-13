@@ -8,7 +8,7 @@ import MainPage from "./src/components/main.js";
 async function init(){
         const token = sessionStorage.getItem(tokenKey)
         if (token){
-                await DOMHandler.load(MainPage)
+                DOMHandler.load(MainPage)
         }else{
                 DOMHandler.load(LoginPage)
         }

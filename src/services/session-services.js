@@ -14,3 +14,7 @@ export async function signupUser(credentials = { email, password }) {
   
     return user;
 }
+
+export async function logoutUser(){
+    sessionStorage.removeItem(tokenKey)
+}
