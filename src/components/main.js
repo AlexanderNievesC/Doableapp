@@ -1,21 +1,39 @@
 import { STORE } from "../STORE.js"
+import DOMHandler from "../dom-handler.js";
+import LoginPage from "../pages/login.js";
+import { logoutUser } from "../services/session-services.js";
 import { createTask, getTask } from "../services/task-services.js";
 
+function formatDate(inputDate) {
+    const date = new Date(inputDate);
+    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
 
-function getItems(){
+function getItems(tasks){
 
     return `
     <div class="flex-row">
         <div>
-            ${STORE.tasks.map(task => {
+            ${tasks.map(task => {
                 return `
                 <div id="flex-column">
-                    <div>
-                        <input type="checkbox"  id="Checkbox_assignment"> 
-                        <label for="Checkbox_pending" class="primary__bold">${task.title}</label>
+                    <div id="flex-row1" >
+                        <div>
+                            ${task.completed ? `<input type="checkbox" checked id="Checkbox_assignment">` :  `<input type="checkbox" id="Checkbox_assignment">` }
+                        </div>
+                        <div>
+                            <label class="checkbox_pending" for="Checkbox_pending" class="${!task.completed? 'primary__bold' : 'primary__gray'}">${task.title}</label>
+                            <div>${task.due_date!=null ? formatDate(task.due_date) : ""}</div>
+                        </div>
                     </div>
-                    <img src="/assets/alert.svg" width="16px" height="16px">
-                </div>
+                    ${!task.important
+                        ? `<img src="/assets/alert.svg" width="16px" height="16px">`
+                        : (!task.completed
+                            ? `<img src="/assets/alert_important.svg" width="16px" height="16px">`
+                            : `<img src="/assets/alert_middle.svg" width="16px" height="16px">`
+                        )}
+                    </div>
                 
                 `
             }).join('')}
@@ -23,26 +41,30 @@ function getItems(){
     </div>
     `
 }
+                
+
 
 async function render (){
 
     STORE.tasks=await getTask();
-    console.log(STORE.tasks)
+    let data =  STORE.tasks.sort((a,b)=>a.title.localeCompare(b.title));
+    console.log(data)
+
     return `
     <header id=header_main>
         <div id="logo_area">
             <img src="/assets/{ doable }.svg" width="101px" height="24px">
         </div>
         
-        <img src="/assets/block.svg" width="16px" height="16px">    
+        <img id="block" src="/assets/block.svg" width="16px" height="16px">    
     </header>
     <section>
             <div class="flex-row">
                 <div class="class">Sort</div>
                 <select id="options" class="select__primary"> 
-                    <option value="alphabetical">Alphabetical (a-z)</option>
-                    <option value="alphabetical">Due date</option>
-                    <option value="alphabetical">Importance</option>
+                    <option class="option">Alphabetical (a-z)</option>
+                    <option class="option">Due date</option>
+                    <option class="option">Importance</option>
                 </select>
             </div>
 
@@ -61,13 +83,13 @@ async function render (){
             </div>
 
         <div id="section__body">
-            ${await getItems()}
+            ${await getItems(data)}
             
         </div>
 
         <form>
             <input class="input__primary" name="task" placeholder="do the dishes...">
-            <input class="input__primary" name="date" placeholder="mm/dd/yy">
+            <input class="input__primary" name="due_date" placeholder="mm/dd/yy">
             <button class="button__primary">Add Task</button/>
         </form>
         
@@ -83,18 +105,97 @@ async function render (){
         try {
             event.preventDefault();
     
-            const {task,date} = event.target.elements;
+            const {task,due_date} = event.target.elements;
     
-            const TaskRelated={
+            const data={
                 task:task.value,
-                date:date.value,
+                due_date:due_date.value,
             }
-            createTask(TaskRelated) 
+
+            console.log(data)
+            createTask(data) 
         }catch(error){
-            console.log(error.message)
+            console.log(error)
         }
     })
+
+    function renderTasks() {
+        const tasksContainer = document.getElementById('section__body');
+        tasksContainer.innerHTML = getItems(STORE.tasks);
+    }
+    
+
+    //order tasks
+    const selectElement = document.getElementById('options');
+
+    selectElement.addEventListener("change",(event)=>{
+        const optionSelected = event.target.options[event.target.selectedIndex].value
+
+        switch(optionSelected){
+            case "Alphabetical (a-z)": {
+                STORE.tasks = STORE.tasks.sort((a, b) => a.title.localeCompare(b.title))
+                console.log(STORE.tasks)
+            }
+            break;
+            case "Due date": {
+                STORE.tasks = STORE.tasks.sort((a, b) => new Date(b.due_date) - new Date(a.due_date))
+            }
+            break;
+            case "Importance": {
+                STORE.tasks = STORE.tasks.sort((a, b) => b.important - a.important)
+            } 
+            break;
+        }
+        renderTasks();
+    })
+    
+    //Only pending
+        const checkbox_pending = document.getElementById("Checkbox_pending");
+        const Checkbox_important = document.getElementById("Checkbox_important");
+        
+        checkbox_pending.addEventListener("change",async (event)=>{
+            if (checkbox_pending.checked) {
+                STORE.tasks = STORE.tasks.filter(task => !task.completed )
+                renderTasks();
+            }  else {
+                STORE.tasks = await getTask();
+                renderTasks();
+            }
+        })
+
+    //Only important
+        Checkbox_important.addEventListener("change",async (event)=>{
+            if (Checkbox_important.checked) {
+                STORE.tasks = STORE.tasks.filter(task => task.important)
+                renderTasks();
+            }  else {
+                STORE.tasks = await getTask();
+                renderTasks();
+            }
+        })
+
+    // User Logout
+    const logout_button = document.getElementById("block");
+
+    logout_button.addEventListener("click",()=>{
+        logoutUser()
+        DOMHandler.load(LoginPage)
+    })
+
+    // Asigning pending and important tasks
+    const checkbox_pend = document.querySelectorAll("#Checkbox_assignment");
+
+    checkbox_pend.forEach(checkbox => {
+        checkbox.addEventListener("click",(event)=>{
+            console.log(event.target)
+        })
+    })
+
+
+
 }
+
+
 
 const MainPage = {
     toString(){
